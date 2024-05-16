@@ -1,0 +1,9 @@
+{
+    "extends": "@zardoy/tsconfig/react",
+    "compilerOptions": {
+        "maxNodeModuleJsDepth": 1
+    },
+    "include": [
+        "src"
+    ]
+}
