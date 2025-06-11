@@ -1,7 +1,7 @@
 import { proxy } from 'valtio'
-import { configure, mounts, umount, fs, BackendConfiguration } from '@zenfs/core'
+import { configure, mounts, umount, fs, BackendConfiguration, promises } from '@zenfs/core'
 import { WebAccess } from '@zenfs/dom'
-import { Zip } from '@zenfs/zip'
+import { Zip } from '@zenfs/archives'
 import minecraftData from 'minecraft-data'
 import { Anvil, level } from 'prismarine-provider-anvil'
 import WorldLoader from 'prismarine-world'
@@ -25,20 +25,40 @@ export const mountFile = async (file: File) => {
     if (!file.name.endsWith('.zip')) throw new Error('Only zip files are supported')
     const zipData = await file.arrayBuffer()
     await configure({
-        '/data': { backend: Zip, zipData } as BackendConfiguration,
+        mounts: {
+            '/data': { backend: Zip, data: zipData },
+        },
     })
     await readWorld()
 }
 export const mountDir = async (dir: FileSystemDirectoryHandle) => {
     beforeMountShared()
     await configure({
-        '/data': {
-            backend: WebAccess,
-            handle: dir,
-        } as BackendConfiguration,
+        mounts: {
+            '/data': {
+                backend: WebAccess,
+                handle: dir,
+            },
+        },
     })
     await readWorld()
 }
+
+const debugReading = async () => {
+    console.log('downloading')
+    const arrayBuffer = await fetch('https://play.isavvy.education/background/iSavvy_Pack.zip').then(async res => res.arrayBuffer())
+    await configure({
+        mounts: {
+            '/resourcepack': { backend: Zip, data: arrayBuffer },
+        },
+    })
+    console.log('downloaded')
+    const data = await promises.readFile('/resourcepack/assets/minecraft/blockstates/lift.json', 'utf8')
+    console.log(data)
+    console.log('done')
+}
+
+debugReading()
 
 const readWorld = async () => {
     const { SpawnX, SpawnZ, SpawnY, Version } = await level.readLevel('/data/level.dat')
@@ -120,7 +140,7 @@ const readWorld = async () => {
                             const block = column.getBlock(new Vec3(x, y, z))
                             if (block.type === 0) continue
                             scannerState.blocksEncountered[block.name] ??= 0
-                            scannerState.blocksEncountered[block.name]++
+                            scannerState.blocksEncountered[block.name]!++
                         }
                     }
                 }

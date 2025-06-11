@@ -3,8 +3,8 @@
   "displayName": "Minecraft World Scanner",
   "license": "MIT",
   "scripts": {
-    "start": "vite",
-    "build": "vite build",
+    "start": "rsbuild",
+    "build": "rsbuild build",
     "lint": "eslint src/**"
   },
   "dependencies": {
@@ -12,17 +12,20 @@
     "@arwes/react-bgs": "1.0.0-next.24050601",
     "@arwes/react-frames": "1.0.0-next.24050601",
     "@arwes/react-text": "1.0.0-next.24050601",
+    "@rsbuild/core": "^1.3.22",
+    "@rsbuild/plugin-node-polyfill": "^1.3.0",
+    "@rsbuild/plugin-react": "^1.3.2",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
     "@types/wicg-file-system-access": "^2023.10.5",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "^4.5.2",
     "@xmcl/game-data": "^1.2.4",
     "@zardoy/react-util": "^0.2.1",
     "@zardoy/tsconfig": "^1.5.1",
     "@zardoy/vit": "^0.1.9",
-    "@zenfs/core": "^0.9.3",
-    "@zenfs/dom": "^0.2.2",
-    "@zenfs/zip": "^0.2.0",
+    "@zenfs/archives": "^1.2.0",
+    "@zenfs/core": "^2.2.3",
+    "@zenfs/dom": "^1.1.8",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.1.1",
     "eslint-config-zardoy": "^0.2.17",
@@ -52,5 +55,11 @@
     "arrowParens": "avoid",
     "printWidth": 160,
     "endOfLine": "auto"
+  },
+  "packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
